@@ -1,0 +1,73 @@
+#root {
+    background-color: gray;
+    height: 100%;
+    min-height: 100vh;
+}
+
+.arrow:before {
+    content: "▼";
+}
+
+
+.ReactTags__tags {
+    position: relative;
+}
+
+.ReactTags__clearAll {
+    cursor: pointer;
+    padding: 10px;
+    margin: 10px;
+    background: #f88d8d;
+    color: #fff;
+    border: none;
+}
+
+/* Styles for the input */
+.ReactTags__tagInput {
+    border-radius: 2px;
+    display: inline-block;
+}
+
+.ReactTags__tagInput input.ReactTags__tagInputField,
+.ReactTags__tagInput input.ReactTags__tagInputField:focus {
+    display: flex;
+    height: 31px;
+    margin: 5px;
+    font-size: 12px;
+    border: 1px solid #eee;
+    min-width: 300px;
+    width: auto;
+}
+
+.ReactTags__editInput {
+    border-radius: 1px;
+}
+
+.ReactTags__editTagInput {
+    display: inline-flex;
+}
+
+/* Styles for selected tags */
+.ReactTags__selected span.ReactTags__tag {
+    border: 1px solid #ddd;
+    background: #63bcfd;
+    color: white;
+    font-size: 12px;
+    display: inline-block;
+    padding: 5px;
+    margin: 0 5px;
+    border-radius: 2px;
+}
+
+.ReactTags__selected a.ReactTags__remove {
+    color: #aaa;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.ReactTags__remove {
+    border: none;
+    cursor: pointer;
+    background: none;
+    color: white;
+}

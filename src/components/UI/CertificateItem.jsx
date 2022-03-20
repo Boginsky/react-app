@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import DeleteModalWindow from "./modal-window/DeleteModalWindow";
 import ViewModalWindow from "./modal-window/ViewModalWindow";
 import AddCertificatesModalWindow from "./modal-window/AddCertificatesModalWindow";
-import {observer} from "mobx-react-lite";
 
 const CertificateItem = ({certificates, certificate, remove}) => {
     const [show, setShow] = useState(false);

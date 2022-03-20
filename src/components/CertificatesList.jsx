@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import CertificateItem from "./UI/CertificateItem";
 import {observer} from "mobx-react-lite";
 
-const CertificatesList = ({setCertificates, searchQuery, certificates, remove,setSuccess}) => {
+const CertificatesList = ({setCertificates, searchQuery, certificates, remove}) => {
     const [order, serOrder] = useState('ASC')
     const sorting = (col) => {
         if (order === 'ASC') {
@@ -63,7 +63,6 @@ const CertificatesList = ({setCertificates, searchQuery, certificates, remove,se
                                 certificates={certificates}
                                 certificate={certificate}
                                 remove={remove}
-                                setSuccess={setSuccess}
                             />
                         )}
                     </tbody>
@@ -77,4 +76,4 @@ const CertificatesList = ({setCertificates, searchQuery, certificates, remove,se
     }
 };
 
-export default observer (CertificatesList);
+export default observer(CertificatesList);

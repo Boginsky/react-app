@@ -1,6 +1,5 @@
 import React from 'react';
 import {WithContext as ReactTags} from 'react-tag-input';
-import {observer} from "mobx-react-lite";
 
 const Tag = ({tags, setTags}) => {
 

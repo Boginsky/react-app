@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import classes from "./Login.module.css"
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
@@ -9,12 +9,28 @@ const Login = () => {
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [formError, setFormError] = useState('')
     const navigate = useNavigate()
 
     function onLinkClick(e) {
         e.preventDefault()
-        store.login(username, password)
-        navigate("../certificates", {replace: true})
+        if (formError === '') {
+            store.login(username, password)
+            navigate("../certificates?page=1&size=10", {replace: true})
+        }
+    }
+
+    useEffect(() => {
+        checkForm()
+    }, [username, password])
+
+    function checkForm() {
+        setFormError('')
+        if (username.length < 3 || username.length > 30) {
+            setFormError('login')
+        } else if (password.length < 4 || password.length > 30) {
+            setFormError('password')
+        }
     }
 
     const {store} = useContext(Context)
@@ -42,12 +58,12 @@ const Login = () => {
                                         onChange={e => setUsername(e.target.value)}
                                         value={username}
                                         type="text"
-                                        className={store.error !== '' ? 'form-control is-invalid' : 'form-control'}
+                                        className={formError === 'login' ? 'form-control is-invalid' : 'form-control'}
                                         placeholder="login"
                                         minLength={3}
                                         maxLength={30}
                                     />
-                                    {store.error !== '' ?
+                                    {formError === 'login' ?
                                         <small id="passwordHelp" className="text-danger">
                                             Must be 3-30 characters long.
                                         </small>
@@ -57,13 +73,13 @@ const Login = () => {
                                     <input type="password"
                                            onChange={e => setPassword(e.target.value)}
                                            value={password}
-                                           className={store.error !== '' ? 'form-control is-invalid' : 'form-control'}
+                                           className={formError === 'password' ? 'form-control is-invalid' : 'form-control'}
                                            id="password"
                                            placeholder="password"
                                            autoComplete='off'
                                            minLength={4}
                                            maxLength={30}/>
-                                    {store.error !== '' ?
+                                    {formError === 'password' ?
                                         <small id="passwordHelp" className="text-danger">
                                             Must be 4-30 characters long.
                                         </small>

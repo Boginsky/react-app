@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import CertificateService from "../../services/CertificateService";
 import Loader from "../../components/UI/loader/Loader";
 import {useFetching} from "../../hooks/useFetching";
@@ -6,22 +6,28 @@ import Input from "../../components/UI/input/Input";
 import CertificatesList from "../../components/CertificatesList";
 import Pagebar from "../../components/UI/pagination/Pagebar";
 import {observer} from "mobx-react-lite";
+import {Context} from "../../index";
+import {useNavigate} from "react-router-dom";
 
 const Certificate = () => {
 
+    const urlParams = new URLSearchParams(window.location.search)
+    const paramPage = urlParams.get('page')
+    const paramSize = urlParams.get('size')
+
     const path = 'https://cdn0.iconfinder.com/data/icons/shift-free/32/Error-512.png'
     const [certificates, setCertificates] = useState([])
-    const [size, setSize] = useState(10)
-    const [page, setPage] = useState(0)
+    const [size, setSize] = useState(paramSize !== null ? paramSize : 10)
+    const [page, setPage] = useState(paramPage !== null ? paramPage : 0)
     const [searchQuery, setSearchQuery] = useState('')
     const [amountOfPages, setAmountOfPages] = useState(0)
-    const [success,setSuccess] = useState(false)
     const [fetchCertificate, isLoading, certificateError] = useFetching(async () => {
         const response = await CertificateService.getAll(page, size)
         setCertificates(response.data.content)
         setAmountOfPages(response.data.amountOfPages)
     })
-
+    const {store} = useContext(Context)
+    const navigate = useNavigate()
 
     const removeCertificate = (certificate) => {
         setCertificates(certificates.filter(p => p.id !== certificate.id))
@@ -29,7 +35,11 @@ const Certificate = () => {
 
     useEffect(() => {
         fetchCertificate()
-    }, [page, size,success])
+        navigate({
+            pathname:'/certificates',
+            search: `?page=${page}&size=${size}`
+        })
+    }, [page, size, store.success])
 
     function hideErrorWindow() {
         let x = document.getElementById("errorTemplate")
@@ -69,7 +79,6 @@ const Certificate = () => {
                     remove={removeCertificate}
                     certificates={certificates}
                     setCertificates={setCertificates}
-                    setSuccess={setSuccess}
                 />
             }
             <Pagebar
@@ -81,4 +90,4 @@ const Certificate = () => {
         </div>
     );
 };
-export default observer (Certificate);
+export default observer(Certificate);

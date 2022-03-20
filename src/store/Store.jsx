@@ -5,6 +5,7 @@ export default class Store {
 
     isAuth = false
     error = ''
+    success = 0
 
     constructor() {
         makeAutoObservable(this);
@@ -16,6 +17,10 @@ export default class Store {
 
     setError(error) {
         this.error = error
+    }
+
+    setSuccess() {
+        ++this.success
     }
 
     async login(username, password) {

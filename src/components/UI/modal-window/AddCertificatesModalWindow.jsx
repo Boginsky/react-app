@@ -1,57 +1,84 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Button from "react-bootstrap/Button";
 import {Modal} from "react-bootstrap";
 import Tag from "../tag/Tag";
 import CertificateService from "../../../services/CertificateService";
+import {Context} from "../../../index";
 import {observer} from "mobx-react-lite";
 
 const AddCertificatesModalWindow = ({show, setShow, certificate}) => {
+
     const [certificateError, setCertificateError] = useState('')
     const [certificateSuccess, setCertificateSuccess] = useState('')
+    const [formError, setFormError] = useState('')
     const handleClose = () => setShow(false);
+    const [name, setName] = useState(certificate === undefined ? '' : certificate.name)
+    const [description, setDescription] = useState(certificate === undefined ? '' : certificate.description)
+    const [price, setPrice] = useState(certificate === undefined ? 1 : certificate.price)
+    const [duration, setDuration] = useState(certificate === undefined ? 1 : certificate.duration)
+    const [tags, setTags] = useState([])
+    const {store} = useContext(Context)
 
     const handleAdd = async (e) => {
         e.preventDefault()
-        try {
-            setCertificateSuccess('')
-            setCertificateError('')
-            await CertificateService.create({
-                "name": name,
-                "description": description,
-                "price": price,
-                "duration": duration,
-                "tags": tags
-            })
-            setCertificateSuccess('Success')
-        } catch (e) {
-            setCertificateError('Something went wrong')
+        if (formError === '') {
+            try {
+                setCertificateSuccess('')
+                setCertificateError('')
+                await CertificateService.create({
+                    "name": name,
+                    "description": description,
+                    "price": price,
+                    "duration": duration,
+                    "tags": tags
+                })
+                setCertificateSuccess('Success')
+            } catch (e) {
+                setCertificateError('Something went wrong')
+            }
         }
     }
 
     const handleEdit = async (e) => {
         e.preventDefault()
-        try {
-            setCertificateSuccess('')
-            setCertificateError('')
-            await CertificateService.update(certificate.id, {
-                "name": name,
-                "description": description,
-                "price": price,
-                "duration": duration,
-                "tags": tags
+        if (formError === '') {
+            try {
+                setCertificateSuccess('')
+                setCertificateError('')
+                await CertificateService.update(certificate.id, {
+                    "name": name,
+                    "description": description,
+                    "price": price,
+                    "duration": duration,
+                    "tags": tags
 
-            })
-            setCertificateSuccess('Success')
-        } catch (e) {
-            setCertificateError('Something went wrong')
+                })
+                setCertificateSuccess('Success')
+                store.setSuccess()
+            } catch (e) {
+                setCertificateError('Something went wrong')
+            }
         }
     }
 
-    const [name, setName] = useState('')
-    const [description, setDescription] = useState('')
-    const [price, setPrice] = useState(1)
-    const [duration, setDuration] = useState(1)
-    const [tags, setTags] = useState([])
+    useEffect(() => {
+        checkForm()
+    }, [name, description, duration, price])
+
+    function checkForm() {
+        setFormError('')
+        if (name.length < 6 || name.length > 30) {
+            setFormError('name')
+        } else if (description.length < 12 || description.length > 1000) {
+            setFormError('description')
+        } else if (duration < 0) {
+            setFormError('duration')
+        } else if (price < 0) {
+            setFormError('price')
+        }
+    }
+
+
     return (
         <>
             <Modal
@@ -82,9 +109,9 @@ const AddCertificatesModalWindow = ({show, setShow, certificate}) => {
                             <div className="col-sm-10">
                                 <input onChange={e => setName(e.target.value)} type="text" className="form-control"
                                        placeholder={certificate === undefined ? 'Title' : certificate.name}
-                                       minLength={6} maxLength={30}
+                                       minLength={6} maxLength={30} value={name}
                                 />
-                                {certificateError !== '' && certificateSuccess === '' ?
+                                {formError === 'name' ?
                                     <small id="passwordHelp" className="text-danger">
                                         Must be 6-30 characters long.
                                     </small>
@@ -97,9 +124,9 @@ const AddCertificatesModalWindow = ({show, setShow, certificate}) => {
                                 <textarea onChange={e => setDescription(e.target.value)} className="form-control"
                                           rows="3"
                                           placeholder={certificate === undefined ? 'Description' : certificate.description}
-                                          minLength={12} maxLength={1000}
+                                          minLength={12} maxLength={1000} value={description}
                                 />
-                                {certificateError !== '' && certificateSuccess === '' ?
+                                {formError === 'description' ?
                                     <small id="passwordHelp" className="text-danger">
                                         Must be 12-1000 characters long.
                                     </small>
@@ -112,9 +139,9 @@ const AddCertificatesModalWindow = ({show, setShow, certificate}) => {
                                 <input onChange={e => setDuration(e.target.value)} type="number"
                                        className="form-control"
                                        placeholder={certificate === undefined ? 'Duration' : certificate.duration}
-                                       min={0}
+                                       min={0} value={duration}
                                 />
-                                {certificateError !== '' && certificateSuccess === '' ?
+                                {formError === 'duration' ?
                                     <small id="passwordHelp" className="text-danger">
                                         Must be positive
                                     </small>
@@ -126,8 +153,8 @@ const AddCertificatesModalWindow = ({show, setShow, certificate}) => {
                             <div className="col-sm-10">
                                 <input onChange={e => setPrice(e.target.value)} type="number" className="form-control"
                                        placeholder={certificate === undefined ? 'Price' : certificate.price}
-                                       min={0}/>
-                                {certificateError !== '' && certificateSuccess === '' ?
+                                       min={0} value={price}/>
+                                {formError === 'price' ?
                                     <small id="passwordHelp" className="text-danger">
                                         Must be positive
                                     </small>
@@ -154,4 +181,4 @@ const AddCertificatesModalWindow = ({show, setShow, certificate}) => {
     );
 }
 
-export default AddCertificatesModalWindow;
+export default observer(AddCertificatesModalWindow);

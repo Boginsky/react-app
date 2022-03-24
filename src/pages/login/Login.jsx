@@ -46,6 +46,7 @@ const Login = () => {
                                     <img src="https://cdn-icons-png.flaticon.com/512/947/947496.png"
                                          className="img-fluid profile-image-pic img-thumbnail rounded-circle my-3"
                                          width="200px" alt="profile"/>
+
                                 </div>
                                 {store.error !== ''
                                     ? <div id='errorTemplate' className="alert alert-danger" role="alert">

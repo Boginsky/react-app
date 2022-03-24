@@ -1,43 +1,26 @@
 import axios from "axios";
+import $api from "../http";
 
 export default class CertificateService {
 
     static async getAll(page = 0, size = 10) {
-        return axios.get('http://localhost:5000/gift-certificates', {
+        return $api.get('http://localhost:5000/gift-certificates', {
             params: {
                 page: page,
                 size: size
-            }, headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-                AuthorizationRefresh: `Bearer ${localStorage.getItem('tokenRefresh')}`
             }
         })
     }
 
     static async delete(id) {
-        return axios.delete('http://localhost:5000/gift-certificates/' + id, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-                AuthorizationRefresh: `Bearer ${localStorage.getItem('tokenRefresh')}`
-            }
-        })
+        return $api.delete('/gift-certificates/' + id)
     }
 
     static async create(data) {
-        return axios.post('http://localhost:5000/gift-certificates', data, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-                AuthorizationRefresh: `Bearer ${localStorage.getItem('tokenRefresh')}`
-            }
-        })
+        return $api.post('http://localhost:5000/gift-certificates', {data})
     }
 
     static async update(id, data) {
-        return axios.patch('http://localhost:5000/gift-certificates/' + id, data, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-                AuthorizationRefresh: `Bearer ${localStorage.getItem('tokenRefresh')}`
-            }
-        })
+        return axios.patch('http://localhost:5000/gift-certificates/' + id, {data})
     }
 }

@@ -78,7 +78,6 @@ const AddCertificatesModalWindow = ({show, setShow, certificate}) => {
         }
     }
 
-
     return (
         <>
             <Modal

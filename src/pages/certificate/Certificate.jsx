@@ -14,19 +14,21 @@ const Certificate = () => {
     const urlParams = new URLSearchParams(window.location.search)
     const paramPage = urlParams.get('page')
     const paramSize = urlParams.get('size')
+    const paramSearchQuery = urlParams.get('search')
+    const {store} = useContext(Context)
+
 
     const path = 'https://cdn0.iconfinder.com/data/icons/shift-free/32/Error-512.png'
     const [certificates, setCertificates] = useState([])
     const [size, setSize] = useState(paramSize !== null ? paramSize : 10)
     const [page, setPage] = useState(paramPage !== null ? paramPage : 0)
-    const [searchQuery, setSearchQuery] = useState('')
+    const [searchQuery, setSearchQuery] = useState(paramSearchQuery !== null ? paramSearchQuery : '')
     const [amountOfPages, setAmountOfPages] = useState(0)
-    const [fetchCertificate, isLoading, certificateError] = useFetching(async () => {
+    const [fetchCertificate, isLoading, certificateError] = useFetching(store, async () => {
         const response = await CertificateService.getAll(page, size)
         setCertificates(response.data.content)
         setAmountOfPages(response.data.amountOfPages)
     })
-    const {store} = useContext(Context)
     const navigate = useNavigate()
 
     const removeCertificate = (certificate) => {
@@ -35,11 +37,18 @@ const Certificate = () => {
 
     useEffect(() => {
         fetchCertificate()
-        navigate({
-            pathname:'/certificates',
-            search: `?page=${page}&size=${size}`
-        })
-    }, [page, size, store.success])
+        if (searchQuery.length > 0) {
+            navigate({
+                pathname: '/certificates',
+                search: `?page=${page}&size=${size}&search=${searchQuery}`
+            })
+        } else {
+            navigate({
+                pathname: '/certificates',
+                search: `?page=${page}&size=${size}`
+            })
+        }
+    }, [page, size, store.success, searchQuery])
 
     function hideErrorWindow() {
         let x = document.getElementById("errorTemplate")

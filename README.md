@@ -1,70 +1,80 @@
-# Getting Started with Create React App
+# React
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+#### Application requirements
 
-## Available Scripts
+1. EcmaScript, JSX (https://reactjs.org/docs/introducing-jsx.html)
+2. Development Environment: Visual Studio Code or any
+3. create-react-app https://github.com/facebook/create-react-app
+4. The Latest version of React 
+5. Node & NPM
+6. HTML5
+7. The Latest version of CSS
 
-In the project directory, you can run:
+#### General requirements
 
-### `npm start`
+1. Include UI in an executable jar. Running on local dev server only for development purposes. 
+2. Bootstrap can be used.
+3. Refreshing of a page should not affect pagination.
+4. Duplication of browser’s tab should lead to exactly the same page (pagination, etc.). Modals may be hidden. Local storage may be used only for security and profile info purposes. All search state should be in url. 
+5. Styles of header and footer should be implemented according to the mockups, should be static and be stuck to the top and on the bottom of the page.
+6. Code should be readable, easy maintainable and reusable. 
+7. Follow component-based application structure.
+8. Screenshots of working application should be attached to a merge request. 
+9. In scope of this task backend may be changed a bit, but without rewriting significant amount of code 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Example
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. Login page (localhost:<port>/login)
 
-### `npm test`
+![](media/login_page.png)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Navbar fixed to top 
+2. Footer on bottom 
+3. Login and password input fields 
+4. Login button. When login successful, redirect to “Certificate List page”. 
+5. Error returned from server area. (such as “Login or Password is not found” 
 
-### `npm run build`
+Input fields should be validated, and inline error messages should be displayed according to the following rules:  
+     a. No blank fields
+     b. Login field length must not be less than 3 characters and greater than 30 characters 
+     c. Password length must not be less than 4 characters and greater than 30 characters 
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Example of field inline validation error (valid for all forms):
+![](media/error_example_1.png)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. Certificate list page (localhost:<port>/certificates)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+![](media/list_page.png)
 
-### `npm run eject`
+1. Add new. Open “Add or edit” modal 
+2. Current user login and picture (picture is optional) 
+3. Logout action. Go to “Login page” after successful logout 
+4. Error message in case server returned error. Closeable. *Autohide (Optional)
+5. Search field and action. User can filter data by tags, title, description.
+For example, fluffy #(little cat) #(fun) - find certificates that correspond all statements below:
+        * have tags “little cat” and “fun” 
+        * contain “fluffy” in title or description.
+6. By default, data is ordered by creation date. Sort icon show current sort order (asc, desc), ex: . Clicking on icon trigger sort by corresponding field.
+7. Go to “Add or edit” or “Delete” Modal Views
+8. Page size. Values: 10, 20, 50.
+9. Paging. First and last page should be always accessible. A current page is highlighted.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+3. Add or Edit certificate
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+![](media/add_edit_page.png)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. Title is “Add New Certificate” or “Edit certificate with ID = <id>”. In case of Edit data must be pre-populated. 
+2. Create your own component /or reuse something like https://www.npmjs.com/package/react-tag-input. Title, description and price fields are required and should be validated according to the following rules:  
+     * No blank fields
+     * Title field must not be less than 6 and greater than 30 characters
+     * Description field must not be less than 12 and greater than 1000 characters
+     * Price must be a number or float and be greater than 0
+Duration must be a number. 0 – indicates this is an infinite certificate
+Otherwise, if one of the conditions is not met, inline validation error shown in component, like. 'Tag' field is optional, but tag name should be not less than 3 and greater than 15 characters. After submit, modal must be hidden and data in table reloaded. This action should reload current page. In case of error show inline error shown under modal header, like:
+![](media/error_example_2.png)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+4. Delete certificate
 
-## Learn More
+Modal confirmation. If user click ‘Yes’, certificate must be deleted, modal hidden and data in table reloaded.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+![](media/delete_page.png)
